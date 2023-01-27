@@ -36,7 +36,7 @@ export const App = () => {
         <h1>Phonebook</h1>
         <ContactForm onSubmit={addContact} />
 
-        <h2>My Contacts</h2>
+        <h2>My Contacts 1</h2>
         <Filter />
         <ContactList />
       </div>
