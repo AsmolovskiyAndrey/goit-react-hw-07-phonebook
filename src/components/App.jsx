@@ -5,16 +5,23 @@ import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addMyContact, getContacts } from './redux/contactSlice';
-// import { getContacts } from './redux/selectors';
+// import { addMyContact } from './redux/contactSlice';
+import { getContacts, getStatus, getError } from './redux/selectors';
 
-import { getPostAction } from './redux/store';
+import { fetchMyContacts, addContact } from './redux/operations';
+import { useEffect } from 'react';
 
 export const App = () => {
   const myContacts = useSelector(getContacts);
+  const myStatus = useSelector(getStatus);
+  const myError = useSelector(getError);
   const dispatch = useDispatch();
 
-  const addContact = data => {
+  useEffect(() => {
+    dispatch(fetchMyContacts());
+  }, [dispatch]);
+
+  const addContactLocal = data => {
     const { name, number } = data;
     if (checkDoubleContact(data)) {
       alert(`${name} is already in contacts.`);
@@ -26,30 +33,24 @@ export const App = () => {
       number,
     };
 
-    dispatch(addMyContact(newContact));
+    // dispatch(addMyContact(newContact));
+    dispatch(addContact(newContact));
   };
 
   const checkDoubleContact = inputData => {
     return myContacts.find(contact => contact.name === inputData.name);
   };
 
-  const handleClick = () => {
-    dispatch(getPostAction);
-  };
-
   return (
     <>
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={addContact} />
-
-        <h2>My Contacts 1</h2>
+        <ContactForm onSubmit={addContactLocal} />
+        <h2>My Contacts</h2>
+        {myStatus && !myError && <strong>Loading Phonebook ...</strong>}
+        {myError && <strong>{myError}</strong>}
         <Filter />
         <ContactList />
-
-        <button type="button" onClick={handleClick}>
-          getPost
-        </button>
       </div>
     </>
   );
