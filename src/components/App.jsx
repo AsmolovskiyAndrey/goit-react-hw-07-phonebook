@@ -2,13 +2,12 @@
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
 import { useSelector, useDispatch } from 'react-redux';
-// import { addMyContact } from './redux/contactSlice';
 import { getContacts, getStatus, getError } from './redux/selectors';
 
-import { fetchMyContacts, addContact } from './redux/operations';
+import { fetchContacts, addContact } from './redux/operations';
 import { useEffect } from 'react';
 
 export const App = () => {
@@ -18,7 +17,7 @@ export const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchMyContacts());
+    dispatch(fetchContacts());
   }, [dispatch]);
 
   const addContactLocal = data => {
@@ -28,12 +27,11 @@ export const App = () => {
       return;
     }
     const newContact = {
-      id: nanoid(),
+      // id: nanoid(), //! Добавляется на сервере
       name,
       number,
     };
 
-    // dispatch(addMyContact(newContact));
     dispatch(addContact(newContact));
   };
 

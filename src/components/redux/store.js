@@ -5,10 +5,4 @@ export const store = configureStore({
   reducer: {
     phoneBook: contactsReducer,
   },
-  // middleware: getDefaultMiddleware =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: {
-  //       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-  //     },
-  //   }),
 });

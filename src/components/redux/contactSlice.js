@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMyContacts, addContact } from './operations';
+import { fetchContacts, addContact, deleteContact } from './operations';
 
 export const contactSlice = createSlice({
   name: 'phoneBook',
@@ -8,7 +8,6 @@ export const contactSlice = createSlice({
       items: [],
       isLoading: false,
       error: null,
-      my: '',
     },
     filter: '',
   },
@@ -16,27 +15,20 @@ export const contactSlice = createSlice({
     addFilter: (state, action) => {
       state.filter = action.payload;
     },
-    // addMyContact: (state, action) => {
-    //   state.contacts.items.push(action.payload);
-    // },
-    deleteMyContact: (state, action) => {
-      state.contacts.items = state.contacts.items.filter(
-        contact => contact.id !== action.payload
-      );
-    },
   },
   extraReducers: {
-    [fetchMyContacts.pending]: state => {
+    [fetchContacts.pending]: state => {
       state.contacts.isLoading = true;
       state.contacts.error = null;
     },
-    [fetchMyContacts.fulfilled]: (state, action) => {
+    [fetchContacts.fulfilled]: (state, action) => {
       state.contacts.isLoading = false;
       state.contacts.items = action.payload;
     },
-    [fetchMyContacts.rejected]: state => {
+    [fetchContacts.rejected]: state => {
       state.contacts.error = 'Something went wrong, reload please the page...';
     },
+
     [addContact.pending]: state => {
       state.contacts.isLoading = true;
       state.contacts.error = null;
@@ -48,9 +40,23 @@ export const contactSlice = createSlice({
     [addContact.rejected]: state => {
       state.contacts.error = 'Adding went wrong...';
     },
+
+    [deleteContact.pending]: state => {
+      state.contacts.isLoading = true;
+      state.contacts.error = null;
+    },
+    [deleteContact.fulfilled]: (state, action) => {
+      state.contacts.isLoading = false;
+      state.contacts.items = state.contacts.items.filter(
+        contact => contact.id !== action.payload.id
+      );
+    },
+    [deleteContact.rejected]: state => {
+      state.contacts.error = 'Deleting went wrong...';
+    },
   },
 });
 
-export const { deleteMyContact, addFilter } = contactSlice.actions;
+export const { addFilter } = contactSlice.actions;
 
 export const contactsReducer = contactSlice.reducer;
