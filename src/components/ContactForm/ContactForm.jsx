@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
+import { getStatus } from 'components/redux/selectors';
+import { useSelector } from 'react-redux';
 
 export const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const status = useSelector(getStatus);
 
   const handleInputChange = e => {
     switch (e.target.name) {
@@ -55,7 +59,7 @@ export const ContactForm = ({ onSubmit }) => {
         />
       </label>
       <br />
-      <button className={css.btn} type="submit">
+      <button className={css.btn} disabled={status} type="submit">
         Add contact
       </button>
     </form>
