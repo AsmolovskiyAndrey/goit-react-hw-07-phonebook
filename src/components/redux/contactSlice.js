@@ -3,7 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 export const contactSlice = createSlice({
   name: 'phoneBook',
   initialState: {
-    contacts: [],
+    contacts: {
+      items: [],
+      isLoading: false,
+      error: null,
+    },
     filter: '',
   },
   reducers: {
@@ -11,10 +15,10 @@ export const contactSlice = createSlice({
       state.filter = action.payload;
     },
     addMyContact: (state, action) => {
-      state.contacts.push(action.payload);
+      state.contacts.items.push(action.payload);
     },
     deleteMyContact: (state, action) => {
-      state.contacts = state.contacts.filter(
+      state.contacts.items = state.contacts.items.filter(
         contact => contact.id !== action.payload
       );
     },
@@ -27,5 +31,5 @@ export const { addMyContact, deleteMyContact, addFilter } =
 export const contactsReducer = contactSlice.reducer;
 
 //! ==========SELECTORS ==============
-export const getContacts = state => state.phoneBook.contacts;
+export const getContacts = state => state.phoneBook.contacts.items;
 export const getFilter = state => state.phoneBook.filter;

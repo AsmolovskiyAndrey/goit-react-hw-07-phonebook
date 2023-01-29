@@ -6,6 +6,9 @@ import { nanoid } from 'nanoid';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { addMyContact, getContacts } from './redux/contactSlice';
+// import { getContacts } from './redux/selectors';
+
+import { getPostAction } from './redux/store';
 
 export const App = () => {
   const myContacts = useSelector(getContacts);
@@ -30,6 +33,10 @@ export const App = () => {
     return myContacts.find(contact => contact.name === inputData.name);
   };
 
+  const handleClick = () => {
+    dispatch(getPostAction);
+  };
+
   return (
     <>
       <div>
@@ -39,6 +46,10 @@ export const App = () => {
         <h2>My Contacts 1</h2>
         <Filter />
         <ContactList />
+
+        <button type="button" onClick={handleClick}>
+          getPost
+        </button>
       </div>
     </>
   );
