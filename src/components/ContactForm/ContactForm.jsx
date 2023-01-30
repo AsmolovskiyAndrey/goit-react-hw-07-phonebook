@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
 import { getStatus } from 'components/redux/selectors';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from 'components/redux/selectors';
+import { addContact } from 'components/redux/operations';
 
 export const ContactForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const status = useSelector(getStatus);
+  const myContacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleInputChange = e => {
     switch (e.target.name) {
@@ -25,9 +28,28 @@ export const ContactForm = ({ onSubmit }) => {
 
   const handleSubmitForm = e => {
     e.preventDefault();
-    onSubmit({ name, number });
+    addContactLocal({ name, number });
     setName('');
     setNumber('');
+  };
+
+  const addContactLocal = data => {
+    const { name, number } = data;
+    if (checkDoubleContact(data)) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+    const newContact = {
+      // id: nanoid(), //! Добавляется на сервере
+      name,
+      number,
+    };
+
+    dispatch(addContact(newContact));
+  };
+
+  const checkDoubleContact = inputData => {
+    return myContacts.find(contact => contact.name === inputData.name);
   };
 
   return (
@@ -64,8 +86,4 @@ export const ContactForm = ({ onSubmit }) => {
       </button>
     </form>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
